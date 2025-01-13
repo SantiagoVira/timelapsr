@@ -1,17 +1,17 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { Image, StyleSheet, Platform, View } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { NewProjectButton } from "@/components/NewProjectButton";
 
 export default function HomeScreen() {
   return (
     <ThemedView style={styles.content}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Hi Natalie!</ThemedText>
-        <ThemedText type="title">Wassup!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Projects</ThemedText>
       </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
@@ -46,6 +46,9 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
+      <View style={styles.footer}>
+        <NewProjectButton label="+" />
+      </View>
     </ThemedView>
   );
 }
@@ -67,11 +70,9 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  footer: {
     position: "absolute",
+    bottom: 96,
+    right: 12,
   },
 });

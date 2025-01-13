@@ -20,6 +20,7 @@ const MAPPING = {
   "chevron.right": "chevron-right",
   "square.grid.2x2": "grid-view",
   camera: "camera-alt",
+  plus: "add",
 } as Partial<
   Record<
     import("expo-symbols").SymbolViewProps["name"],
