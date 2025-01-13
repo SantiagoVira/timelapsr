@@ -1,9 +1,10 @@
-import { Image, StyleSheet, Platform, View } from "react-native";
+import { Image, StyleSheet, Platform, View, FlatList } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { NewProjectButton } from "@/components/NewProjectButton";
+import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
+import { Project } from "@/components/Project";
 
 export default function HomeScreen() {
   return (
@@ -12,42 +13,22 @@ export default function HomeScreen() {
         <ThemedText type="title">Projects</ThemedText>
       </ThemedView>
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-      <View style={styles.footer}>
-        <NewProjectButton label="+" />
+      <FlatList
+        data={[
+          { name: "Cherry Blossom" },
+          { name: "Oak" },
+          { name: "Oaky" },
+          { name: "Oakie" },
+        ]}
+        renderItem={(item) => <Project {...item.item} />}
+        keyExtractor={(item) => item.name}
+        contentContainerStyle={{ gap: 10 }} // Row gap
+        columnWrapperStyle={{ gap: 10 }} // Column gap
+        numColumns={2}
+      />
+
+      <View style={{ ...styles.footer, bottom: useBottomTabOverflow() }}>
+        <NewProjectButton />
       </View>
     </ThemedView>
   );
@@ -70,9 +51,9 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
+  grid: {},
   footer: {
     position: "absolute",
-    bottom: 96,
     right: 12,
   },
 });

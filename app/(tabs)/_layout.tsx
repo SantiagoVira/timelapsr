@@ -7,6 +7,7 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -15,7 +16,6 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "dark"].tint,
-
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -31,7 +31,7 @@ export default function TabLayout() {
         name="index"
         options={{
           tabBarIcon: ({ color }) => (
-            <IconSymbol name="square.grid.2x2" color={color} />
+            <Ionicons name="grid-outline" size={24} color={color} />
           ),
           title: "Projects",
         }}
@@ -39,7 +39,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="camera"
         options={{
-          tabBarIcon: ({ color }) => <IconSymbol name="camera" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="camera-outline" size={24} color={color} />
+          ),
           title: "Camera",
         }}
       />

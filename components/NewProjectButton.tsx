@@ -1,11 +1,11 @@
 import { StyleSheet, View, Pressable, Text } from "react-native";
 import { IconSymbol } from "./ui/IconSymbol";
 
-export const NewProjectButton: React.FC<{ label: string }> = ({ label }) => {
+export const NewProjectButton: React.FC = () => {
   return (
     <View style={styles.container}>
       <Pressable style={styles.button} onPress={() => alert("hello")}>
-        <IconSymbol name="plus" color="white" weight="heavy" />
+        <IconSymbol name="plus" color="white" weight="bold" />
       </Pressable>
     </View>
   );
