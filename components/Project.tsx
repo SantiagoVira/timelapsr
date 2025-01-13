@@ -3,13 +3,11 @@ import { ThemedText } from "./ThemedText";
 
 export const Project: React.FC<{ name: string }> = ({ name }) => {
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.button} onPress={() => alert("hello")}>
-        <ThemedText type="defaultSemiBold" style={styles.title}>
-          {name}
-        </ThemedText>
-      </Pressable>
-    </View>
+    <Pressable style={styles.container} onTouchStart={() => alert("hello")}>
+      <ThemedText type="defaultSemiBold" style={styles.title}>
+        {name}
+      </ThemedText>
+    </Pressable>
   );
 };
 
@@ -26,10 +24,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "#3c3c3c",
     padding: 12,
-  },
-  button: {
-    width: "100%",
-    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
