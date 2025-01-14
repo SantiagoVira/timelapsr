@@ -9,12 +9,15 @@ import {
 import { CustomModal } from "./CustomModal";
 import { ThemedText } from "./ThemedText";
 import { useState } from "react";
+import { useSQLiteContext } from "expo-sqlite";
 
 export const NewProjectModal: React.FC<{
   isVisible: boolean;
   onClose: () => void;
 }> = ({ isVisible, onClose }) => {
   const [name, setName] = useState("");
+  const db = useSQLiteContext();
+
   return (
     <CustomModal isVisible={isVisible} onClose={onClose}>
       <ThemedText type="subtitle">New Project</ThemedText>

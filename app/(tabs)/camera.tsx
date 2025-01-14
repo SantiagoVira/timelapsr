@@ -6,6 +6,7 @@ import Timer, { TimerValueType } from "@/components/camera/Timer";
 import { ThemedView } from "@/components/ThemedView";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
+import { useSQLiteContext } from "expo-sqlite";
 import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -21,6 +22,7 @@ export default function TabTwoScreen() {
   const [flash, setFlash] = useState<FlashMode>("auto");
   const [timer, setTimer] = useState<TimerValueType>(0);
   const cameraRef = useRef<CameraView | null>();
+  const db = useSQLiteContext();
 
   return (
     <PermissionsWrapper>
@@ -44,9 +46,13 @@ export default function TabTwoScreen() {
         </View>
 
         <View style={styles.actionBar}>
-          <View />
-          <Capture timer={timer} cameraRef={cameraRef} />
-          <Reverse setFacing={setFacing} />
+          <View style={styles.actionElement} />
+          <View style={styles.actionElement}>
+            <Capture timer={timer} cameraRef={cameraRef} />
+          </View>
+          <View style={styles.actionElement}>
+            <Reverse setFacing={setFacing} />
+          </View>
         </View>
       </ThemedView>
     </PermissionsWrapper>
@@ -58,8 +64,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 12,
+    marginTop: 12,
     width: "100%",
     alignItems: "center",
+  },
+  actionElement: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   cameraSettings: {
     flexDirection: "row",
