@@ -12,6 +12,7 @@ export const NewProjectModal: React.FC<{
       <Text style={styles.inputLabel}>
         Name: <Text style={styles.required}>*</Text>
       </Text>
+
       <TextInput
         style={styles.input}
         placeholder="Ex. My Favorite Tree"></TextInput>

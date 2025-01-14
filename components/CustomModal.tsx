@@ -1,5 +1,4 @@
 import {
-  Modal,
   View,
   Text,
   Pressable,
@@ -12,53 +11,19 @@ import {
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { AnimatedView } from "react-native-reanimated/lib/typescript/component/View";
 import { useEffect } from "react";
+import Modal from "react-native-modal";
 
 export const CustomModal: React.FC<
   React.PropsWithChildren<{ isVisible: boolean; onClose: () => void }>
 > = ({ isVisible, children, onClose }) => {
-  useEffect(() => {
-    if (isVisible) {
-      fadeIn();
-    } else {
-      fadeOut();
-    }
-  }, [isVisible]);
-  // fadeAnim will be used as the value for opacity. Initial Value: 0
-  const fadeAnim = useAnimatedValue(0);
-
-  const fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.delay(150).start(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0.5,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
-    });
-  };
-
-  const fadeOut = () => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 50,
-      useNativeDriver: true,
-    }).start();
-  };
-
   return (
-    <Modal animationType="slide" visible={isVisible} transparent={true}>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <Animated.View
-          style={[
-            styles.modalOverlay,
-            {
-              opacity: fadeAnim,
-            },
-          ]}
-        />
-      </TouchableWithoutFeedback>
-
+    <Modal
+      hasBackdrop
+      isVisible={isVisible}
+      avoidKeyboard
+      hideModalContentWhileAnimating
+      swipeDirection="down"
+      onBackdropPress={onClose}>
       <View style={styles.modalContent}>
         <View style={styles.xbar}>
           <Pressable onPress={onClose}>
@@ -72,18 +37,10 @@ export const CustomModal: React.FC<
 };
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-    backgroundColor: "#000",
-  },
   modalContent: {
     width: "100%",
     backgroundColor: "#25292e",
-    borderTopRightRadius: 18,
-    borderTopLeftRadius: 18,
-    position: "absolute",
+    borderRadius: 18,
     bottom: 0,
     padding: 24,
     paddingBottom: 42,
