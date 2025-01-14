@@ -1,5 +1,6 @@
 import { StyleSheet, View, Pressable, Text } from "react-native";
 import { ThemedText } from "./ThemedText";
+import { Image } from "expo-image";
 
 export const Project: React.FC<{ name: string }> = ({ name }) => {
   return (

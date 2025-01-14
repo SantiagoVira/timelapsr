@@ -14,8 +14,12 @@ import { ThemedView } from "@/components/ThemedView";
 import { NewProjectButton } from "@/components/NewProjectButton";
 import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
 import { Project } from "@/components/Project";
+import { useState } from "react";
+import { NewProjectModal } from "@/components/NewProjectModal";
 
 export default function HomeScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <ThemedView style={styles.content}>
       <ThemedView style={styles.titleContainer}>
@@ -36,8 +40,13 @@ export default function HomeScreen() {
         numColumns={2}
       />
 
+      <NewProjectModal
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
+
       <View style={{ ...styles.footer, bottom: useBottomTabOverflow() }}>
-        <NewProjectButton />
+        <NewProjectButton onClick={() => setModalVisible(true)} />
       </View>
     </ThemedView>
   );
