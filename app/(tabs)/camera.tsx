@@ -4,10 +4,16 @@ import PermissionsWrapper from "@/components/camera/PermissionsWrapper";
 import Reverse from "@/components/camera/Reverse";
 import Timer, { TimerValueType } from "@/components/camera/Timer";
 import { ThemedView } from "@/components/ThemedView";
+import {
+  get_last_project_image,
+  get_project_images,
+  get_projects,
+  insert_image_into_project,
+} from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
 import { useSQLiteContext } from "expo-sqlite";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 const Tree = require("../../assets/images/tree.png");
@@ -21,8 +27,23 @@ export default function TabTwoScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [flash, setFlash] = useState<FlashMode>("auto");
   const [timer, setTimer] = useState<TimerValueType>(0);
+  const [project, setProject] = useState("tree");
+  const [lastImage, setLastImage] = useState<string | null>(null);
   const cameraRef = useRef<CameraView | null>();
   const db = useSQLiteContext();
+
+  useEffect(() => {
+    get_last_project_image(db, project).then((r) => setLastImage(r.uri));
+  }, []);
+
+  const takePicture = () => {
+    cameraRef.current?.takePictureAsync().then((r) => {
+      if (!r) return;
+      insert_image_into_project(db, "tree", r.uri);
+      console.log(lastImage, r.uri);
+      setLastImage(r.uri);
+    });
+  };
 
   return (
     <PermissionsWrapper>
@@ -33,7 +54,7 @@ export default function TabTwoScreen() {
         </View>
 
         <View style={styles.viewport}>
-          <Image source={Tree} style={styles.overlay} />
+          <Image source={lastImage} style={styles.overlay} />
           <CameraView
             style={styles.camera}
             facing={facing}
@@ -48,7 +69,7 @@ export default function TabTwoScreen() {
         <View style={styles.actionBar}>
           <View style={styles.actionElement} />
           <View style={styles.actionElement}>
-            <Capture timer={timer} cameraRef={cameraRef} />
+            <Capture timer={timer} takePicture={takePicture} />
           </View>
           <View style={styles.actionElement}>
             <Reverse setFacing={setFacing} />

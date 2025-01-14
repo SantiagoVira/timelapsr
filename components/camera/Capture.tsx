@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { TimerValueType } from "./Timer";
 import { useState } from "react";
-import { CameraView } from "expo-camera";
 
 export const capture = (
   timer: TimerValueType,
@@ -26,16 +25,10 @@ export const capture = (
 
 const Capture: React.FC<{
   timer: TimerValueType;
-  cameraRef: React.MutableRefObject<CameraView | null | undefined>;
-}> = ({ timer, cameraRef }) => {
+  takePicture: () => void;
+}> = ({ timer, takePicture }) => {
   const [capturing, setCapturing] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-
-  const takePicture = () => {
-    cameraRef.current?.takePictureAsync().then((r) => {
-      console.log(r?.uri);
-    });
-  };
 
   return (
     <Pressable

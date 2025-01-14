@@ -10,6 +10,7 @@ import { CustomModal } from "./CustomModal";
 import { ThemedText } from "./ThemedText";
 import { useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
+import { create_project } from "@/hooks/db";
 
 export const NewProjectModal: React.FC<{
   isVisible: boolean;
@@ -35,7 +36,7 @@ export const NewProjectModal: React.FC<{
           style={[styles.button, name === "" && styles.disabled]}
           disabled={name === ""}
           onPressOut={() => {
-            alert(name);
+            create_project(db, name);
             setName("");
             onClose();
           }}>

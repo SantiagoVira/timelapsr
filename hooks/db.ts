@@ -1,8 +1,10 @@
 import * as SQLite from "expo-sqlite";
 
-export const create_table = async (db: SQLite.SQLiteDatabase) => {
-  await db.runAsync(
-    "CREATE TABLE IF NOT EXISTS pictures (uri TEXT PRIMARY KEY NOT NULL, project TEXT NOT NULL, taken DATETIME DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')));"
+export const create_tables = async (db: SQLite.SQLiteDatabase) => {
+  await db.execAsync(
+    `CREATE TABLE IF NOT EXISTS pictures (uri TEXT PRIMARY KEY NOT NULL, project TEXT NOT NULL, taken DATETIME DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')));
+    CREATE TABLE IF NOT EXISTS projects (project TEXT PRIMARY KEY NOT NULL, created DATETIME DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')));
+    `
   );
 };
 
@@ -11,12 +13,15 @@ export interface ProjectType {
   project: string;
   taken: Date;
 }
+interface UriType {
+  uri: string;
+}
 
 export const get_projects: (
   db: SQLite.SQLiteDatabase
 ) => Promise<ProjectType[]> = async (db) => {
   return await db.getAllAsync(
-    `SELECT uri, project, MAX(when_ts) as when_ts FROM pictures GROUP BY project ORDER BY taken`
+    `SELECT uri, project, MAX(taken) as taken FROM pictures GROUP BY project ORDER BY taken`
   );
 };
 
@@ -24,28 +29,38 @@ export const get_project_images = async (
   db: SQLite.SQLiteDatabase,
   project_name: string
 ) => {
-  return await db.getAllAsync(
+  return (await db.getAllAsync(
     `SELECT uri FROM pictures WHERE project IS ? ORDER BY taken;`,
     project_name
-  );
+  )) as UriType[];
 };
 
 export const get_last_project_image = async (
   db: SQLite.SQLiteDatabase,
   project_name: string
 ) => {
-  return await db.getFirstAsync(
+  return (await db.getFirstAsync(
     `SELECT uri FROM pictures WHERE project IS ? ORDER BY taken DESC;`,
     project_name
-  );
+  )) as UriType;
 };
 
 export const get_first_project_image = async (
   db: SQLite.SQLiteDatabase,
   project_name: string
 ) => {
-  return await db.getFirstAsync(
+  return (await db.getFirstAsync(
     `SELECT uri FROM pictures WHERE project IS ? ORDER BY taken ASC;`,
+    project_name
+  )) as UriType;
+};
+
+export const create_project = async (
+  db: SQLite.SQLiteDatabase,
+  project_name: string
+) => {
+  return await db.runAsync(
+    `INSERT INTO projects (project) VALUES (?);`,
     project_name
   );
 };

@@ -12,7 +12,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import * as SQLite from "expo-sqlite";
-import { create_table } from "@/hooks/db";
+import { create_tables } from "@/hooks/db";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,7 +42,7 @@ export default function RootLayout() {
           const db = await SQLite.openDatabaseAsync(
             SQLite.defaultDatabaseDirectory
           );
-          create_table(db);
+          create_tables(db);
         }}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
