@@ -1,23 +1,38 @@
 import { get_project_names } from "@/hooks/db";
 import { Ionicons } from "@expo/vector-icons";
 import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 
-const ProjectPicker: React.FC = () => {
+const ProjectPicker: React.FC<{
+  project: string | null;
+  setProject: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ project, setProject }) => {
   const [data, setData] = useState<{ project: string }[]>([]);
   const db = useSQLiteContext();
+  const selectRef = useRef<SelectDropdown>(null);
 
   useEffect(() => {
     get_project_names(db).then((r) => setData(r));
   }, []);
+
+  useEffect(() => {
+    if (selectRef.current && project && data) {
+      const idx = data.map((p) => p.project).indexOf(project);
+      selectRef.current.selectIndex(idx);
+    }
+  }, [selectRef, project, data]);
+
   return (
     <SelectDropdown
       data={data}
+      ref={selectRef}
       onSelect={(selectedItem, index) => {
-        console.log(selectedItem, index);
+        setProject(selectedItem.project);
       }}
+      dropdownOverlayColor="transparent"
+      defaultValue={{ project }}
       renderButton={(selectedItem, isOpened) => {
         return (
           <View style={styles.dropdownButtonStyle}>
@@ -25,7 +40,7 @@ const ProjectPicker: React.FC = () => {
               style={styles.dropdownButtonTxtStyle}
               numberOfLines={1}
               ellipsizeMode="tail">
-              {(selectedItem && selectedItem.project) || "Select your project"}
+              {(selectedItem && selectedItem.project) || "Choose your project"}
             </Text>
             <Ionicons
               name={isOpened ? "chevron-up" : "chevron-down"}

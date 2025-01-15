@@ -5,7 +5,11 @@ import ProjectPicker from "@/components/camera/ProjectPicker";
 import Reverse from "@/components/camera/Reverse";
 import Timer, { TimerValueType } from "@/components/camera/Timer";
 import { ThemedView } from "@/components/ThemedView";
-import { get_last_project_image, insert_image_into_project } from "@/hooks/db";
+import {
+  get_last_project_image,
+  get_most_recent_project,
+  insert_image_into_project,
+} from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
 import { useSQLiteContext } from "expo-sqlite";
@@ -18,22 +22,31 @@ export default function TabTwoScreen() {
   - zooming!!
   */
 
+  const db = useSQLiteContext();
   const [facing, setFacing] = useState<CameraType>("back");
   const [flash, setFlash] = useState<FlashMode>("auto");
   const [timer, setTimer] = useState<TimerValueType>(0);
-  const [project, setProject] = useState("tree");
+  const [project, setProject] = useState(get_most_recent_project(db));
   const [lastImage, setLastImage] = useState<string | null>(null);
   const cameraRef = useRef<CameraView | null>();
-  const db = useSQLiteContext();
 
   useEffect(() => {
-    get_last_project_image(db, project).then((r) => setLastImage(r.uri));
-  }, []);
+    if (project) {
+      get_last_project_image(db, project).then((r) => {
+        console.log(r);
+        setLastImage(r ? r.uri : null);
+      });
+    }
+  }, [project]);
 
   const takePicture = () => {
     cameraRef.current?.takePictureAsync().then((r) => {
       if (!r) return;
-      insert_image_into_project(db, "tree", r.uri);
+      if (!project) {
+        alert("Create a projectin the Projects tab first!");
+        return;
+      }
+      insert_image_into_project(db, project, r.uri);
       setLastImage(r.uri);
     });
   };
@@ -46,11 +59,12 @@ export default function TabTwoScreen() {
             <Flash flash={flash} setFlash={setFlash} />
             <Timer timer={timer} setTimer={setTimer} />
           </View>
-          <ProjectPicker />
+          <ProjectPicker project={project} setProject={setProject} />
         </View>
 
         <View style={styles.viewport}>
-          <Image source={lastImage} style={styles.overlay} />
+          {lastImage && <Image source={lastImage} style={styles.overlay} />}
+
           <CameraView
             style={styles.camera}
             facing={facing}

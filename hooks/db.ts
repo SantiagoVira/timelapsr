@@ -31,6 +31,18 @@ export const get_projects: (
   );
 };
 
+export const get_most_recent_project: (
+  db: SQLite.SQLiteDatabase
+) => string | null = (db) => {
+  const project = db.getFirstSync(
+    "SELECT project FROM pictures ORDER BY taken"
+  ) as {
+    project: string;
+  } | null;
+
+  return project ? project.project : null;
+};
+
 export const get_project_images = async (
   db: SQLite.SQLiteDatabase,
   project_name: string
