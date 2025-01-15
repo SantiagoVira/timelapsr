@@ -8,6 +8,15 @@ export const create_tables = async (db: SQLite.SQLiteDatabase) => {
   );
 };
 
+export const DELETE_ALL_DATA_PERMANENTLY = (db: SQLite.SQLiteDatabase) => {
+  db.execSync(
+    `
+    DROP TABLE pictures;
+    DROP TABLE projects;
+    `
+  );
+};
+
 export interface ProjectType {
   uri?: string;
   project: string;

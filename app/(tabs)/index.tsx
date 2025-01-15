@@ -1,13 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  Platform,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Touchable,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -16,8 +7,13 @@ import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
 import { Project } from "@/components/Project";
 import { useEffect, useState } from "react";
 import { NewProjectModal } from "@/components/NewProjectModal";
-import { get_projects, ProjectType } from "@/hooks/db";
+import {
+  DELETE_ALL_DATA_PERMANENTLY,
+  get_projects,
+  ProjectType,
+} from "@/hooks/db";
 import { useSQLiteContext } from "expo-sqlite";
+import { useFocusEffect } from "expo-router";
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,7 +22,11 @@ export default function HomeScreen() {
 
   useEffect(() => {
     get_projects(db).then((r) => setData(r));
-  }, []);
+  }, [modalVisible]);
+
+  useFocusEffect(() => {
+    get_projects(db).then((r) => setData(r));
+  });
 
   return (
     <ThemedView style={styles.content}>
@@ -38,9 +38,11 @@ export default function HomeScreen() {
         data={data}
         renderItem={(item) => <Project {...item.item} />}
         keyExtractor={(item) => item.project}
-        contentContainerStyle={{ gap: 10 }} // Row gap
+        contentContainerStyle={{ gap: 10, paddingBottom: 36 }} // Row gap
         columnWrapperStyle={{ gap: 10 }} // Column gap
         numColumns={2}
+        style={styles.grid}
+        showsVerticalScrollIndicator={false}
       />
 
       <NewProjectModal
@@ -72,7 +74,9 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
-  grid: {},
+  grid: {
+    marginBottom: 52,
+  },
   footer: {
     position: "absolute",
     right: 12,

@@ -5,7 +5,7 @@ import { ProjectType } from "@/hooks/db";
 
 export const Project: React.FC<ProjectType> = ({ project, uri }) => {
   return (
-    <Pressable style={styles.container} onTouchStart={() => alert("hello")}>
+    <Pressable style={styles.container} onPress={() => alert("hello")}>
       <Image source={uri} style={styles.image} />
       <ThemedText type="defaultSemiBold" style={styles.title}>
         {project}
@@ -16,7 +16,7 @@ export const Project: React.FC<ProjectType> = ({ project, uri }) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: "95%",
+    width: "100%",
     aspectRatio: "0.75",
     borderRadius: 4,
   },
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: "100%",
     marginTop: 4,
+    marginLeft: 4,
   },
   container: {
     maxWidth: "49%",

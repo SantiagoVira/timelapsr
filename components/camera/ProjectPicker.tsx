@@ -1,5 +1,6 @@
 import { get_project_names } from "@/hooks/db";
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -13,9 +14,9 @@ const ProjectPicker: React.FC<{
   const db = useSQLiteContext();
   const selectRef = useRef<SelectDropdown>(null);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     get_project_names(db).then((r) => setData(r));
-  }, []);
+  });
 
   useEffect(() => {
     if (selectRef.current && project && data) {
