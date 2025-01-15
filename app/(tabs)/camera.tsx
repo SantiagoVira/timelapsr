@@ -12,7 +12,7 @@ import {
 } from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -31,10 +31,17 @@ export default function TabTwoScreen() {
   const [lastImage, setLastImage] = useState<string | null>(null);
   const cameraRef = useRef<CameraView | null>();
 
+  useFocusEffect(() => {
+    if (project) {
+      get_last_project_image(db, project).then((r) => {
+        setLastImage(r ? r.uri : null);
+      });
+    }
+  });
+
   useEffect(() => {
     if (project) {
       get_last_project_image(db, project).then((r) => {
-        console.log(r);
         setLastImage(r ? r.uri : null);
       });
     }
