@@ -1,17 +1,36 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import DeletePictureModal from "./DeletePictureModal";
+import { useSQLiteContext } from "expo-sqlite";
+import { delete_image_from_project } from "@/hooks/db";
 
-const Picture: React.FC<{ uri: string; num: number }> = ({ uri, num }) => {
-  console.log(uri);
+const Picture: React.FC<{ uri: string; num: number; project_name: string }> = ({
+  uri,
+  num,
+  project_name,
+}) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const db = useSQLiteContext();
   return (
     <View style={styles.container}>
+      <DeletePictureModal
+        isVisible={modalVisible}
+        setIsVisible={setModalVisible}
+        num={num}
+        onDelete={() => {
+          delete_image_from_project(db, uri);
+          setModalVisible(false);
+        }}
+        project_name={project_name}
+      />
       <Image source={uri} style={styles.image} />
       <Text style={styles.numLabel}>{num}</Text>
       <Pressable
         style={styles.deleteButton}
         onPress={() => {
-          alert("delete");
+          setModalVisible(true);
         }}>
         <Ionicons name="trash" color="red" size={20} />
       </Pressable>
@@ -20,7 +39,12 @@ const Picture: React.FC<{ uri: string; num: number }> = ({ uri, num }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { alignItems: "flex-start", gap: 6, position: "relative" },
+  container: {
+    alignItems: "flex-start",
+    gap: 6,
+    position: "relative",
+    marginTop: 9,
+  },
   deleteButton: {
     backgroundColor: "white",
     borderRadius: "100%",

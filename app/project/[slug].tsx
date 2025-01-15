@@ -15,7 +15,6 @@ const Project: React.FC = () => {
   const db = useSQLiteContext();
 
   useFocusEffect(() => {
-    if (allImages.length > 0) return;
     get_project_images(db, slug.toString()).then((r) => {
       setAllImages(r.map((r) => r.uri));
     });
@@ -33,7 +32,12 @@ const Project: React.FC = () => {
       <ScrollView horizontal style={styles.imageCarouselWrapper}>
         <View style={styles.imageCarousel}>
           {allImages.map((img, i) => (
-            <Picture uri={img} num={i + 1} key={i} />
+            <Picture
+              uri={img}
+              num={i + 1}
+              project_name={slug.toString()}
+              key={i}
+            />
           ))}
         </View>
       </ScrollView>

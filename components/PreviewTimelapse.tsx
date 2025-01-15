@@ -1,7 +1,6 @@
-import { get_last_project_image, get_project_images } from "@/hooks/db";
+import { get_project_images } from "@/hooks/db";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
