@@ -1,3 +1,4 @@
+import PreviewTimelapse from "@/components/PreviewTimelapse";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +16,7 @@ const Project: React.FC = () => {
         </Link>
         <ThemedText type="title">{slug}</ThemedText>
       </View>
+      <PreviewTimelapse project_name={slug.toString()} />
     </ThemedView>
   );
 };
