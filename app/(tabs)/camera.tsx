@@ -12,6 +12,7 @@ import {
 } from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -77,7 +78,15 @@ export default function TabTwoScreen() {
         </View>
 
         <View style={styles.actionBar}>
-          <View style={styles.actionElement} />
+          <View style={styles.actionElement}>
+            <Link
+              style={styles.projectPreviewWrapper}
+              href={`/project/${project}`}>
+              {lastImage && (
+                <Image source={lastImage} style={styles.projectPreview} />
+              )}
+            </Link>
+          </View>
           <View style={styles.actionElement}>
             <Capture timer={timer} takePicture={takePicture} />
           </View>
@@ -91,6 +100,19 @@ export default function TabTwoScreen() {
 }
 
 const styles = StyleSheet.create({
+  projectPreview: {
+    borderRadius: 2,
+    width: "100%",
+    height: "100%",
+  },
+  projectPreviewWrapper: {
+    borderRadius: 6,
+    width: 48,
+    aspectRatio: 0.75,
+    padding: 4,
+    borderWidth: 2,
+    borderColor: "white",
+  },
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",

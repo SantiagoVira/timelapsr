@@ -46,6 +46,10 @@ export default function RootLayout() {
         }}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="project/[slug]"
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="+not-found" />
         </Stack>
       </SQLite.SQLiteProvider>

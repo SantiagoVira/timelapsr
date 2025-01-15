@@ -2,10 +2,13 @@ import { StyleSheet, View, Pressable, Text } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { Image } from "expo-image";
 import { ProjectType } from "@/hooks/db";
+import { router } from "expo-router";
 
 export const Project: React.FC<ProjectType> = ({ project, uri }) => {
   return (
-    <Pressable style={styles.container} onPress={() => alert("hello")}>
+    <Pressable
+      style={styles.container}
+      onPress={() => router.push(`/project/${project}`)}>
       <Image source={uri} style={styles.image} />
       <ThemedText type="defaultSemiBold" style={styles.title}>
         {project}
