@@ -9,9 +9,9 @@ export const create_tables = async (db: SQLite.SQLiteDatabase) => {
 };
 
 export interface ProjectType {
-  uri: string;
+  uri?: string;
   project: string;
-  taken: Date;
+  taken?: Date;
 }
 interface UriType {
   uri: string;
@@ -21,7 +21,7 @@ export const get_projects: (
   db: SQLite.SQLiteDatabase
 ) => Promise<ProjectType[]> = async (db) => {
   return await db.getAllAsync(
-    `SELECT uri, project, MAX(taken) as taken FROM pictures GROUP BY project ORDER BY taken`
+    `SELECT uri, projects.project FROM projects LEFT JOIN (SELECT uri, project, MAX(taken) AS taken FROM pictures GROUP BY project ORDER BY taken) USING(project) ORDER BY taken DESC;`
   );
 };
 

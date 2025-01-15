@@ -40,7 +40,6 @@ export default function TabTwoScreen() {
     cameraRef.current?.takePictureAsync().then((r) => {
       if (!r) return;
       insert_image_into_project(db, "tree", r.uri);
-      console.log(lastImage, r.uri);
       setLastImage(r.uri);
     });
   };

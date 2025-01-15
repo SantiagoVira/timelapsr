@@ -14,11 +14,19 @@ import { ThemedView } from "@/components/ThemedView";
 import { NewProjectButton } from "@/components/NewProjectButton";
 import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
 import { Project } from "@/components/Project";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NewProjectModal } from "@/components/NewProjectModal";
+import { get_projects, ProjectType } from "@/hooks/db";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [data, setData] = useState<ProjectType[]>();
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    get_projects(db).then((r) => setData(r));
+  }, []);
 
   return (
     <ThemedView style={styles.content}>
@@ -27,14 +35,9 @@ export default function HomeScreen() {
       </ThemedView>
 
       <FlatList
-        data={[
-          { name: "Cherry Blossom" },
-          { name: "Oak" },
-          { name: "Oaky" },
-          { name: "Oakie" },
-        ]}
+        data={data}
         renderItem={(item) => <Project {...item.item} />}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.project}
         contentContainerStyle={{ gap: 10 }} // Row gap
         columnWrapperStyle={{ gap: 10 }} // Column gap
         numColumns={2}
