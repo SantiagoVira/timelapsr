@@ -2,7 +2,7 @@ import Picture from "@/components/Picture";
 import PreviewTimelapse from "@/components/PreviewTimelapse";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { get_project_images } from "@/hooks/db";
+import { delete_image_from_project, get_project_images } from "@/hooks/db";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
@@ -15,6 +15,7 @@ const Project: React.FC = () => {
   const db = useSQLiteContext();
 
   useFocusEffect(() => {
+    if (allImages.length > 0) return; // To make preview work
     get_project_images(db, slug.toString()).then((r) => {
       setAllImages(r.map((r) => r.uri));
     });
@@ -37,6 +38,13 @@ const Project: React.FC = () => {
               num={i + 1}
               project_name={slug.toString()}
               key={i}
+              onDelete={() => {
+                delete_image_from_project(db, img).then(() => {
+                  get_project_images(db, slug.toString()).then((r) => {
+                    setAllImages(r.map((r) => r.uri));
+                  });
+                });
+              }}
             />
           ))}
         </View>

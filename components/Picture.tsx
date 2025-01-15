@@ -6,11 +6,12 @@ import DeletePictureModal from "./DeletePictureModal";
 import { useSQLiteContext } from "expo-sqlite";
 import { delete_image_from_project } from "@/hooks/db";
 
-const Picture: React.FC<{ uri: string; num: number; project_name: string }> = ({
-  uri,
-  num,
-  project_name,
-}) => {
+const Picture: React.FC<{
+  uri: string;
+  num: number;
+  project_name: string;
+  onDelete: () => void;
+}> = ({ uri, num, project_name, onDelete }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const db = useSQLiteContext();
   return (
@@ -20,7 +21,7 @@ const Picture: React.FC<{ uri: string; num: number; project_name: string }> = ({
         setIsVisible={setModalVisible}
         num={num}
         onDelete={() => {
-          delete_image_from_project(db, uri);
+          onDelete();
           setModalVisible(false);
         }}
         project_name={project_name}
