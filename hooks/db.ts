@@ -17,6 +17,12 @@ interface UriType {
   uri: string;
 }
 
+export const get_project_names: (
+  db: SQLite.SQLiteDatabase
+) => Promise<ProjectType[]> = async (db) => {
+  return await db.getAllAsync(`SELECT project from projects`);
+};
+
 export const get_projects: (
   db: SQLite.SQLiteDatabase
 ) => Promise<ProjectType[]> = async (db) => {

@@ -1,22 +1,16 @@
 import Capture from "@/components/camera/Capture";
 import Flash from "@/components/camera/Flash";
 import PermissionsWrapper from "@/components/camera/PermissionsWrapper";
+import ProjectPicker from "@/components/camera/ProjectPicker";
 import Reverse from "@/components/camera/Reverse";
 import Timer, { TimerValueType } from "@/components/camera/Timer";
 import { ThemedView } from "@/components/ThemedView";
-import {
-  get_last_project_image,
-  get_project_images,
-  get_projects,
-  insert_image_into_project,
-} from "@/hooks/db";
+import { get_last_project_image, insert_image_into_project } from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-
-const Tree = require("../../assets/images/tree.png");
 
 export default function TabTwoScreen() {
   /*
@@ -47,9 +41,12 @@ export default function TabTwoScreen() {
   return (
     <PermissionsWrapper>
       <ThemedView style={styles.container}>
-        <View style={styles.cameraSettings}>
-          <Flash flash={flash} setFlash={setFlash} />
-          <Timer timer={timer} setTimer={setTimer} />
+        <View style={styles.topBar}>
+          <View style={styles.cameraSettings}>
+            <Flash flash={flash} setFlash={setFlash} />
+            <Timer timer={timer} setTimer={setTimer} />
+          </View>
+          <ProjectPicker />
         </View>
 
         <View style={styles.viewport}>
@@ -80,6 +77,14 @@ export default function TabTwoScreen() {
 }
 
 const styles = StyleSheet.create({
+  topBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 12,
+    padding: 12,
+    alignItems: "center",
+    width: "100%",
+  },
   actionBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -98,7 +103,6 @@ const styles = StyleSheet.create({
     gap: 12,
     alignItems: "center",
     justifyContent: "flex-start",
-    width: "100%",
     padding: 12,
   },
   viewport: {
@@ -124,7 +128,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    paddingTop: 24,
+    paddingBottom: 88,
     alignItems: "center",
   },
   message: {
