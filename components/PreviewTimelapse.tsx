@@ -6,21 +6,20 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
-const PreviewTimelapse: React.FC<{ project_name: string }> = ({
-  project_name,
-}) => {
+const PreviewTimelapse: React.FC<{
+  project_name: string;
+  allImages: string[];
+}> = ({ project_name, allImages }) => {
   const db = useSQLiteContext();
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-  const [allImages, setAllImages] = useState<string[]>([]);
+
   const [playing, setPlaying] = useState(false);
 
-  useFocusEffect(() => {
-    if (allImages.length > 0) return;
+  useEffect(() => {
     get_project_images(db, project_name).then((r) => {
-      setAllImages(r.map((r) => r.uri));
       setCurrentImage(r[r.length - 1].uri);
     });
-  });
+  }, [allImages]);
 
   const play = (idx: number) => {
     if (idx === allImages.length) {
