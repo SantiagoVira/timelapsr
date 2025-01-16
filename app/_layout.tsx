@@ -9,6 +9,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import { MenuProvider } from "react-native-popup-menu";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import * as SQLite from "expo-sqlite";
@@ -36,24 +37,26 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <SQLite.SQLiteProvider
-        databaseName={SQLite.defaultDatabaseDirectory}
-        onInit={async () => {
-          const db = await SQLite.openDatabaseAsync(
-            SQLite.defaultDatabaseDirectory
-          );
-          create_tables(db);
-        }}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="project/[slug]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </SQLite.SQLiteProvider>
-      <StatusBar style="auto" />
+      <MenuProvider>
+        <SQLite.SQLiteProvider
+          databaseName={SQLite.defaultDatabaseDirectory}
+          onInit={async () => {
+            const db = await SQLite.openDatabaseAsync(
+              SQLite.defaultDatabaseDirectory
+            );
+            create_tables(db);
+          }}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="project/[slug]"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </SQLite.SQLiteProvider>
+        <StatusBar style="auto" />
+      </MenuProvider>
     </ThemeProvider>
   );
 }

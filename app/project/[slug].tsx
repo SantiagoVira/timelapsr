@@ -1,5 +1,6 @@
 import Picture from "@/components/Picture";
 import PreviewTimelapse from "@/components/PreviewTimelapse";
+import ProjectActionMenu from "@/components/ProjectActionMenu";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { delete_image_from_project, get_project_images } from "@/hooks/db";
@@ -24,10 +25,15 @@ const Project: React.FC = () => {
   return (
     <ThemedView style={styles.content}>
       <View style={styles.header}>
-        <Link href={"../"}>
-          <Ionicons name="arrow-back" color="white" size={28} />
-        </Link>
-        <ThemedText type="title">{slug}</ThemedText>
+        <View style={styles.headerLeft}>
+          <Link href={"../"}>
+            <Ionicons name="chevron-back" color="white" size={28} />
+          </Link>
+          <ThemedText type="title">{slug}</ThemedText>
+        </View>
+        <View style={styles.headerRight}>
+          <ProjectActionMenu />
+        </View>
       </View>
       <PreviewTimelapse project_name={slug.toString()} allImages={allImages} />
       <ScrollView horizontal style={styles.imageCarouselWrapper}>
@@ -56,7 +62,7 @@ const Project: React.FC = () => {
 const styles = StyleSheet.create({
   imageCarouselWrapper: {
     width: "100%",
-    padding: 12,
+    paddingVertical: 12,
     backgroundColor: "rgba(0,0,0,0.5)",
     borderRadius: 12,
   },
@@ -64,15 +70,21 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     gap: 16,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
   },
   header: {
     flexDirection: "row",
     padding: 12,
     alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 18,
+    justifyContent: "space-between",
   },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: 9,
+  },
+  headerRight: {},
   content: {
     flex: 1,
     padding: 32,
