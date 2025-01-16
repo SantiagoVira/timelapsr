@@ -1,5 +1,6 @@
 import Capture from "@/components/camera/Capture";
 import Flash from "@/components/camera/Flash";
+import OnionSkin from "@/components/camera/OnionSkin";
 import PermissionsWrapper from "@/components/camera/PermissionsWrapper";
 import ProjectPicker from "@/components/camera/ProjectPicker";
 import Reverse from "@/components/camera/Reverse";
@@ -34,6 +35,7 @@ export default function TabTwoScreen() {
       : get_most_recent_project(db)
   );
   const [lastImage, setLastImage] = useState<string | null>(null);
+  const [onionSkin, setOnionSkin] = useState(true);
   const cameraRef = useRef<CameraView | null>();
 
   useFocusEffect(() => {
@@ -71,12 +73,18 @@ export default function TabTwoScreen() {
           <View style={styles.cameraSettings}>
             <Flash flash={flash} setFlash={setFlash} />
             <Timer timer={timer} setTimer={setTimer} />
+            <OnionSkin onionSkin={onionSkin} setOnionSkin={setOnionSkin} />
           </View>
           <ProjectPicker project={project} setProject={setProject} />
         </View>
 
         <View style={styles.viewport}>
-          {lastImage && <Image source={lastImage} style={styles.overlay} />}
+          {lastImage && (
+            <Image
+              source={lastImage}
+              style={[styles.overlay, { opacity: onionSkin ? 0.3 : 0 }]}
+            />
+          )}
 
           <CameraView
             style={styles.camera}
@@ -163,7 +171,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     zIndex: 100,
-    opacity: 0.3,
     width: "100%",
     height: "100%",
   },

@@ -32,7 +32,7 @@ const ProjectActionMenu: React.FC<{ project_name: string }> = ({
           <MenuOption
             onSelect={() => alert(`Delete`)}
             customStyles={{
-              optionWrapper: [styles.menuItem, { marginTop: 12 }],
+              optionWrapper: styles.menuItem,
             }}>
             <Ionicons name="trash" color="red" size={20} />
             <Text
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     padding: 8,
+    margin: 8,
   },
   menuText: {
     fontSize: 16,

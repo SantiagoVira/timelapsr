@@ -29,7 +29,7 @@ const Timer: React.FC<{
 
 const styles = StyleSheet.create({
   timerNumber: { width: 20, textAlign: "right" },
-  container: { flexDirection: "row", gap: 4 },
+  container: { flexDirection: "row", gap: 4, marginRight: 6 },
 });
 
 export default Timer;
