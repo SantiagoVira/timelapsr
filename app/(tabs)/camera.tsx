@@ -7,6 +7,7 @@ import Reverse from "@/components/camera/Reverse";
 import Timer, { TimerValueType } from "@/components/camera/Timer";
 import { ThemedView } from "@/components/ThemedView";
 import {
+  DELETE_ALL_DATA_PERMANENTLY,
   get_last_project_image,
   get_most_recent_project,
   get_project_names_sync,
@@ -43,6 +44,8 @@ export default function TabTwoScreen() {
   const [lastImage, setLastImage] = useState<string | null>(null);
   const [onionSkin, setOnionSkin] = useState(true);
   const cameraRef = useRef<CameraView | null>();
+
+  console.log(get_most_recent_project(db));
 
   useFocusEffect(() => {
     if (get_project_names_sync(db).length === 0) {
@@ -112,7 +115,7 @@ export default function TabTwoScreen() {
           <View style={styles.actionElement}>
             <Link
               style={styles.projectPreviewWrapper}
-              href={`/project/${project}`}>
+              href={project ? `/project/${project}` : "/camera"}>
               {lastImage && (
                 <Image source={lastImage} style={styles.projectPreview} />
               )}

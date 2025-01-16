@@ -47,16 +47,16 @@ export const get_project_names_sync: (
   return db.getAllSync(`SELECT project from projects;`);
 };
 
-export const get_most_recent_project: (
-  db: SQLite.SQLiteDatabase
-) => string | null = (db) => {
+export const get_most_recent_project: (db: SQLite.SQLiteDatabase) => string = (
+  db
+) => {
   const project = db.getFirstSync(
-    "SELECT project FROM pictures ORDER BY taken DESC"
+    "SELECT uri, projects.project FROM projects LEFT JOIN (SELECT uri, project, MAX(taken) AS taken FROM pictures GROUP BY project ORDER BY taken) USING(project) ORDER BY taken DESC;"
   ) as {
     project: string;
-  } | null;
+  };
 
-  return project ? project.project : null;
+  return project.project;
 };
 
 export const get_project_images = async (

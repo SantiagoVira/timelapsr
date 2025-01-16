@@ -22,6 +22,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     get_projects(db).then((r) => setData(r));
+    // DELETE_ALL_DATA_PERMANENTLY(db);
   }, [modalVisible]);
 
   useFocusEffect(() => {
