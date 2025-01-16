@@ -44,7 +44,7 @@ export const get_most_recent_project: (
   db: SQLite.SQLiteDatabase
 ) => string | null = (db) => {
   const project = db.getFirstSync(
-    "SELECT project FROM pictures ORDER BY taken"
+    "SELECT project FROM pictures ORDER BY taken DESC"
   ) as {
     project: string;
   } | null;

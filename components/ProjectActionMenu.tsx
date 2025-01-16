@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import {
   Menu,
@@ -6,7 +7,9 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
-const ProjectActionMenu: React.FC = () => {
+const ProjectActionMenu: React.FC<{ project_name: string }> = ({
+  project_name,
+}) => {
   return (
     <View>
       <Menu>
@@ -21,7 +24,7 @@ const ProjectActionMenu: React.FC = () => {
             <Text style={styles.menuText}>Export</Text>
           </MenuOption>
           <MenuOption
-            onSelect={() => alert(`Save`)}
+            onSelect={() => router.push(`/camera?project=${project_name}`)}
             customStyles={{ optionWrapper: styles.menuItem }}>
             <Ionicons name="camera-outline" color="white" size={20} />
             <Text style={styles.menuText}>Take picture</Text>

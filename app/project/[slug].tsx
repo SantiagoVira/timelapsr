@@ -12,12 +12,13 @@ import { ScrollView, StyleSheet, View } from "react-native";
 
 const Project: React.FC = () => {
   const { slug } = useLocalSearchParams();
+  const project_name = slug.toString();
   const [allImages, setAllImages] = useState<string[]>([]);
   const db = useSQLiteContext();
 
   useFocusEffect(() => {
     if (allImages.length > 0) return; // To make preview work
-    get_project_images(db, slug.toString()).then((r) => {
+    get_project_images(db, project_name).then((r) => {
       setAllImages(r.map((r) => r.uri));
     });
   });
@@ -32,21 +33,21 @@ const Project: React.FC = () => {
           <ThemedText type="title">{slug}</ThemedText>
         </View>
         <View style={styles.headerRight}>
-          <ProjectActionMenu />
+          <ProjectActionMenu project_name={project_name} />
         </View>
       </View>
-      <PreviewTimelapse project_name={slug.toString()} allImages={allImages} />
+      <PreviewTimelapse project_name={project_name} allImages={allImages} />
       <ScrollView horizontal style={styles.imageCarouselWrapper}>
         <View style={styles.imageCarousel}>
           {allImages.map((img, i) => (
             <Picture
               uri={img}
               num={i + 1}
-              project_name={slug.toString()}
+              project_name={project_name}
               key={i}
               onDelete={() => {
                 delete_image_from_project(db, img).then(() => {
-                  get_project_images(db, slug.toString()).then((r) => {
+                  get_project_images(db, project_name).then((r) => {
                     setAllImages(r.map((r) => r.uri));
                   });
                 });

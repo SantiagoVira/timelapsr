@@ -12,7 +12,7 @@ import {
 } from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
-import { Link, useFocusEffect } from "expo-router";
+import { Link, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -22,12 +22,17 @@ export default function TabTwoScreen() {
   Desired functionality:
   - zooming!!
   */
+  const { project: queryParamProject } = useLocalSearchParams();
 
   const db = useSQLiteContext();
   const [facing, setFacing] = useState<CameraType>("back");
   const [flash, setFlash] = useState<FlashMode>("auto");
   const [timer, setTimer] = useState<TimerValueType>(0);
-  const [project, setProject] = useState(get_most_recent_project(db));
+  const [project, setProject] = useState<string | null>(
+    queryParamProject
+      ? queryParamProject.toString()
+      : get_most_recent_project(db)
+  );
   const [lastImage, setLastImage] = useState<string | null>(null);
   const cameraRef = useRef<CameraView | null>();
 
