@@ -1,4 +1,5 @@
 import * as SQLite from "expo-sqlite";
+import * as FileSystem from "expo-file-system";
 
 export const create_tables = async (db: SQLite.SQLiteDatabase) => {
   await db.execAsync(
@@ -115,6 +116,10 @@ export const delete_project = async (
   db: SQLite.SQLiteDatabase,
   project_name: string
 ) => {
+  const images = await get_project_images(db, project_name);
+  for (let img of images) {
+    await FileSystem.deleteAsync(img.uri, { idempotent: true });
+  }
   return await db.runAsync(
     `DELETE FROM projects WHERE project IS ?;
     DELETE FROM pictures WHERE project IS ?`,
