@@ -9,11 +9,17 @@ import { ThemedView } from "@/components/ThemedView";
 import {
   get_last_project_image,
   get_most_recent_project,
+  get_project_names_sync,
   insert_image_into_project,
 } from "@/hooks/db";
 import { CameraView, CameraType, FlashMode } from "expo-camera";
 import { Image } from "expo-image";
-import { Link, useFocusEffect, useLocalSearchParams } from "expo-router";
+import {
+  Link,
+  router,
+  useFocusEffect,
+  useLocalSearchParams,
+} from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -39,6 +45,10 @@ export default function TabTwoScreen() {
   const cameraRef = useRef<CameraView | null>();
 
   useFocusEffect(() => {
+    if (get_project_names_sync(db).length === 0) {
+      alert("Please create a project first!");
+      router.push("/");
+    }
     if (project) {
       get_last_project_image(db, project).then((r) => {
         setLastImage(r ? r.uri : null);

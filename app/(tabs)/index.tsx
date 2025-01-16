@@ -34,16 +34,30 @@ export default function HomeScreen() {
         <ThemedText type="title">Projects</ThemedText>
       </ThemedView>
 
-      <FlatList
-        data={data}
-        renderItem={(item) => <Project {...item.item} />}
-        keyExtractor={(item) => item.project}
-        contentContainerStyle={{ gap: 10, paddingBottom: 36 }} // Row gap
-        columnWrapperStyle={{ gap: 10 }} // Column gap
-        numColumns={2}
-        style={styles.grid}
-        showsVerticalScrollIndicator={false}
-      />
+      {data && data.length > 0 ? (
+        <FlatList
+          data={data}
+          renderItem={(item) => <Project {...item.item} />}
+          keyExtractor={(item) => item.project}
+          contentContainerStyle={{ gap: 10, paddingBottom: 36 }} // Row gap
+          columnWrapperStyle={{ gap: 10 }} // Column gap
+          numColumns={2}
+          style={styles.grid}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View style={styles.noProjectsWrapper}>
+          <ThemedText style={styles.noProjectsText} type="subtitle">
+            No Projects Yet!
+          </ThemedText>
+          <ThemedText
+            style={{
+              textAlign: "center",
+            }}>
+            Press the "+" button to create your first one!
+          </ThemedText>
+        </View>
+      )}
 
       <NewProjectModal
         isVisible={modalVisible}
@@ -69,6 +83,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  noProjectsWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    width: "100%",
+    padding: "10%",
+    marginBottom: 86,
+    gap: 8,
+  },
+  noProjectsText: {
+    fontSize: 32,
   },
   stepContainer: {
     gap: 8,

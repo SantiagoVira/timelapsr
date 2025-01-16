@@ -41,6 +41,12 @@ export const get_projects: (
   );
 };
 
+export const get_project_names_sync: (
+  db: SQLite.SQLiteDatabase
+) => ProjectType[] = (db) => {
+  return db.getAllSync(`SELECT project from projects;`);
+};
+
 export const get_most_recent_project: (
   db: SQLite.SQLiteDatabase
 ) => string | null = (db) => {
