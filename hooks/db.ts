@@ -110,3 +110,15 @@ export const delete_image_from_project = async (
 ) => {
   return await db.runAsync(`DELETE FROM pictures WHERE uri IS ?;`, uri);
 };
+
+export const delete_project = async (
+  db: SQLite.SQLiteDatabase,
+  project_name: string
+) => {
+  return await db.runAsync(
+    `DELETE FROM projects WHERE project IS ?;
+    DELETE FROM pictures WHERE project IS ?`,
+    project_name,
+    project_name
+  );
+};

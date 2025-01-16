@@ -7,11 +7,29 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import DeleteProjectModal from "./DeleteProjectModal";
+import { useState } from "react";
+import { delete_project } from "@/hooks/db";
+import { useSQLiteContext } from "expo-sqlite";
+
 const ProjectActionMenu: React.FC<{ project_name: string }> = ({
   project_name,
 }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const db = useSQLiteContext();
   return (
     <View>
+      <DeleteProjectModal
+        isVisible={modalVisible}
+        setIsVisible={setModalVisible}
+        project_name={project_name}
+        onDelete={() => {
+          delete_project(db, project_name).then(() => {
+            router.dismissAll();
+            router.replace("/");
+          });
+        }}
+      />
       <Menu>
         <MenuTrigger>
           <Ionicons name="ellipsis-horizontal" color="white" size={24} />
@@ -30,7 +48,7 @@ const ProjectActionMenu: React.FC<{ project_name: string }> = ({
             <Text style={styles.menuText}>Take picture</Text>
           </MenuOption>
           <MenuOption
-            onSelect={() => alert(`Delete`)}
+            onSelect={() => setModalVisible(true)}
             customStyles={{
               optionWrapper: styles.menuItem,
             }}>

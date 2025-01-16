@@ -91,6 +91,7 @@ export default function TabTwoScreen() {
             facing={facing}
             ratio="4:3"
             flash={flash}
+            mirror={true}
             ref={(r) => {
               cameraRef.current = r;
             }}
