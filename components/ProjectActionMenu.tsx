@@ -9,14 +9,36 @@ import {
 } from "react-native-popup-menu";
 import DeleteProjectModal from "./DeleteProjectModal";
 import { useState } from "react";
-import { delete_project } from "@/hooks/db";
+import { delete_project, get_project_images } from "@/hooks/db";
 import { useSQLiteContext } from "expo-sqlite";
+import { FFmpegKit, ReturnCode } from "ffmpeg-kit-react-native";
 
 const ProjectActionMenu: React.FC<{ project_name: string }> = ({
   project_name,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const db = useSQLiteContext();
+
+  const exportVideo = async () => {
+    const pictures = await get_project_images(db, project_name);
+    FFmpegKit.execute("-i file1.mp4 -c:v mpeg4 file2.mp4").then(
+      async (session) => {
+        const returnCode = await session.getReturnCode();
+
+        if (ReturnCode.isSuccess(returnCode)) {
+          // SUCCESS
+          console.log(returnCode.getValue());
+        } else if (ReturnCode.isCancel(returnCode)) {
+          // CANCEL
+          console.log("cancel");
+        } else {
+          // ERROR
+          console.log("Error");
+        }
+      }
+    );
+  };
+
   return (
     <View>
       <DeleteProjectModal
@@ -36,7 +58,7 @@ const ProjectActionMenu: React.FC<{ project_name: string }> = ({
         </MenuTrigger>
         <MenuOptions optionsContainerStyle={styles.menu}>
           <MenuOption
-            onSelect={() => alert(`Save`)}
+            onSelect={exportVideo}
             customStyles={{ optionWrapper: styles.menuItem }}>
             <Ionicons name="share-outline" color="white" size={20} />
             <Text style={styles.menuText}>Export</Text>

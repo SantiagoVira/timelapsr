@@ -45,8 +45,6 @@ export default function TabTwoScreen() {
   const [onionSkin, setOnionSkin] = useState(true);
   const cameraRef = useRef<CameraView | null>();
 
-  console.log(get_most_recent_project(db));
-
   useFocusEffect(() => {
     if (get_project_names_sync(db).length === 0) {
       alert("Please create a project first!");

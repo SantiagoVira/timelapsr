@@ -15,6 +15,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@config-plugins/ffmpeg-kit-react-native": "^9.0.0",
     "@expo/vector-icons": "^14.0.2",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@react-native-picker/picker": "2.9.0",
@@ -35,6 +36,7 @@
     "expo-symbols": "~0.2.1",
     "expo-system-ui": "~4.0.7",
     "expo-web-browser": "~14.0.2",
+    "ffmpeg-kit-react-native": "^6.0.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.6",
